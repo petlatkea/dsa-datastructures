@@ -61,8 +61,56 @@ function main() {
 
   test("size() - after removing", assert(0, list.size()));
 
-  // comment this one in, when ready to really stresstest the list:
-  // stressTestEmptyList();
+  // test list with only a single item in it.
+  testsWithSingleItem();
+
+  // test a completely empty list
+  // stressTestEmptyList(); // comment this one in, when ready to really stresstest the list:
+}
+
+function testsWithSingleItem() {
+  const list = new SinglyLinkedList();
+
+  console.log("--------------------------");
+  console.log(" TEST with single element ");
+  console.log("--------------------------");
+
+  // if a list only has a single item in it 
+  // - all operations should target that item,
+  //   no matter if they are first, last or
+  //   specific to that node or data
+
+  const data = "highlander";
+
+  list.add(data);
+  test("size()", assert(1, list.size()));
+  test("getFirst()", assert(data, list.getFirst()));
+  test("getLast()", assert(data, list.getLast()));
+  
+  let node = list.head;
+  test("getFirstNode()", assert(node, list.getFirstNode()));
+  test("getLastNode()", assert(node, list.getLastNode()));
+  test("getNodeWith(data)", assert(node, list.getNodeWith(data)));
+
+  test("getNextNode(node)", assertNull(list.getNextNode(node)));
+
+  // test if removing first, removed last!
+  list.removeFirstNode();
+  test("removeFirstNode()", assertNull(list.getLastNode())); 
+  list.add(data);
+
+  // test if removing last, removed first!
+  list.removeLastNode();
+  test("removeLastNode()", assertNull(list.getFirstNode()));
+  list.add(data);
+  
+  node = list.head;
+  list.removeNode(node);
+  test("removeNode(node)", assertNull(list.getFirstNode()));
+  list.add(data);
+
+  list.remove(data);
+  test("remove(data)", assertNull(list.getFirstNode()));
 }
 
 function stressTestEmptyList() {
